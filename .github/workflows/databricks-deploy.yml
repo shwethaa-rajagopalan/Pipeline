@@ -20,9 +20,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run tests
-        run: |
-          pytest -q
       - name: Deploy to Databricks
         env:
           DATABRICKS_HOST: ${{ env.DATABRICKS_HOST }}

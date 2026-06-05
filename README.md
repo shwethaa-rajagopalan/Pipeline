@@ -23,12 +23,6 @@ pip install -r requirements.txt
 ./scripts/local_run.sh
 ```
 
-3. Run tests:
-
-```bash
-pytest -q
-```
-
 ## Deployment to Databricks
 
 ### Step 1: Generate a Personal Access Token (PAT)
@@ -121,7 +115,6 @@ curl -X POST "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
 - **calculations/**: Business logic and complex calculations
 - **utils/**: Spark session helpers and DB utilities
 - **conf/**: Configuration files (sample_config.yaml for local/prod setup)
-- **tests/**: Unit tests (pytest-compatible)
 - **scripts/**: Helper scripts for deployment and local runs
 - **.github/workflows/**: GitHub Actions CI/CD workflow
 

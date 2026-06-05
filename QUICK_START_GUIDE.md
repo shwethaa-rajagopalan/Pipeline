@@ -149,7 +149,6 @@ To enable automatic testing and deployment on every push:
    - **Name:** `DATABRICKS_TOKEN`
    - **Value:** Your PAT from Step 1
 3. The workflow in `.github/workflows/databricks-deploy.yml` will now:
-   - Run tests on every push to `main` or `master`
    - Validate Databricks connectivity
    - Deploy automatically
 

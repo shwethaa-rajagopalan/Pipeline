@@ -52,11 +52,6 @@
 
 ## Testing
 
-### Local Test
-```bash
-python -m pytest tests/test_calculations.py -v
-```
-
 ### Databricks Job Execution
 1. Go to **Workflows** → **Jobs** → `nii_forecast_pipeline_job`
 2. Click **Run Now**
@@ -87,7 +82,7 @@ curl -X POST "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
 
 After the initial setup, future deployments are automated:
 1. Push changes to `main` branch
-2. GitHub Actions runs tests and validates
+2. GitHub Actions validates and deploys
 3. Deploy script authenticates and confirms Databricks access
 4. Manual job creation remains (Databricks job API requires specific setup)
 
