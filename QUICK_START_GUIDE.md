@@ -57,11 +57,19 @@ If you need custom compute settings, you can optionally create a dedicated clust
 
 ```sql
 CREATE CATALOG IF NOT EXISTS nii_forecast;
+CREATE SCHEMA IF NOT EXISTS nii_forecast.source;
+CREATE SCHEMA IF NOT EXISTS nii_forecast.dim;
+CREATE SCHEMA IF NOT EXISTS nii_forecast.config;
 CREATE SCHEMA IF NOT EXISTS nii_forecast.pipeline;
 CREATE SCHEMA IF NOT EXISTS nii_forecast.curated;
 ```
 
 3. Click **Run**
+
+Alternatively, run the Python initialization script:
+```bash
+python scripts/init_databricks_schemas.py
+```
 
 ---
 
