@@ -1,11 +1,25 @@
 import argparse
+import os
 from pathlib import Path
 from typing import Dict
 
 from utils.spark_session import create_spark_session
 from pipelines.task_runner import TaskRunner
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+
+def get_repo_root() -> Path:
+    """Get repo root, handling both local and Databricks notebook contexts."""
+    try:
+        return Path(__file__).resolve().parent.parent
+    except NameError:
+        # In Databricks notebooks, __file__ is not defined
+        # Use current working directory or environment variable
+        if "DATABRICKS_RUNTIME_VERSION" in os.environ:
+            return Path.cwd()
+        return Path.cwd()
+
+
+REPO_ROOT = get_repo_root()
 
 
 def main(config_path: str = "conf/sample_config.yaml", task_definition: str = "conf/tasks/nii_forecast_task.yml") -> None:
