@@ -33,6 +33,7 @@ tables:
     actuals_enriched: "/nii_forecast/staging/actuals_enriched"
     forecast_enriched: "/nii_forecast/staging/forecast_enriched"
     launchpoint_enriched: "/nii_forecast/staging/launchpoint_enriched"
+    calculation_lookup: "/nii_forecast/lookup/calculation_lookup"
     driver_parameters: "/nii_forecast/lookup/driver_parameters"
     proxy_enriched: "/nii_forecast/lookup/proxy_enriched"
     inflation_adjustment: "/nii_forecast/lookup/inflation_adjustment"

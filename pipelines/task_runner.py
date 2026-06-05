@@ -19,7 +19,27 @@ class TaskRunner:
 
     def _load_config(self) -> Dict[str, Any]:
         with open(self.config_path, "r") as f:
-            return yaml.safe_load(f)
+            cfg = yaml.safe_load(f)
+
+        if cfg is None:
+            cfg = {}
+
+        if 'paths' not in cfg:
+            cfg['paths'] = {}
+
+        for section_name in ["tables", "intermediate", "output"]:
+            section = cfg.get(section_name, {})
+            if isinstance(section, dict):
+                for key, value in section.items():
+                    if isinstance(value, dict):
+                        for nested_key, nested_value in value.items():
+                            if nested_key not in cfg['paths']:
+                                cfg['paths'][nested_key] = nested_value
+                    else:
+                        if key not in cfg['paths']:
+                            cfg['paths'][key] = value
+
+        return cfg
 
     def _validate_required_params(self, task_context: Dict[str, Any]) -> None:
         required = self.task_definition.get("required_params", [])
