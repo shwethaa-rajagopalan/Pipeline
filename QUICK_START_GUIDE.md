@@ -33,8 +33,11 @@ All steps write to Delta tables under the catalog `nii_forecast`:
 
 ---
 
-### **Step 2: Create a Databricks Compute Cluster**
+### **Step 2: Default Warehouse Recommended (Optional Dedicated Cluster)**
 
+For Databricks free tier, use the default `Serverless Starter Warehouse` (ID: `6c5228901e0e783a`).
+
+If you need custom compute settings, you can optionally create a dedicated cluster:
 1. In your workspace, go to **Compute** (left sidebar)
 2. Click **Create cluster**
 3. Configure:
@@ -89,14 +92,16 @@ You should see:
 
 ---
 
-### **Step 5: Update Configuration with Your Cluster ID**
+### **Step 5: Update Configuration**
 
 Edit [conf/sample_config.yaml](conf/sample_config.yaml):
 
 ```yaml
 databricks:
-  cluster_id: "0123-456789-abcdef01"  # Replace with your Cluster ID from Step 2
+  cluster_id: ""  # Leave blank for the default warehouse
 ```
+
+If you created a dedicated cluster, replace the empty string with its Cluster ID.
 
 ---
 

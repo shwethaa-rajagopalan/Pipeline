@@ -38,15 +38,16 @@ pytest -q
 3. Click **Generate new token** (name: `nii_pipeline_token`, lifetime: 90 days)
 4. Copy the token and save it securely (you'll need it for the next steps)
 
-### Step 2: Use the Default Free Warehouse or Create a Cluster
+### Step 2: Use the Default Free Warehouse (Recommended)
 
-For Databricks free tier, you can use the default serverless warehouse or default job cluster that is created when you sign up.
+For Databricks free tier, use the default Serverless Starter Warehouse in your workspace.
 
-Option A: Use the default warehouse
-- Use the default Databricks warehouse already available in your workspace.
-- No cluster ID is required for this repo-centric job deployment.
+- Default warehouse: `Serverless Starter Warehouse`
+- Warehouse ID: `6c5228901e0e783a`
+- The default warehouse does not require a cluster ID.
+- This repo-centric deployment can run without adding `cluster_id` to the configuration.
 
-Option B: Create a dedicated cluster (optional)
+Optional: Create a dedicated cluster only if you need custom compute settings.
 1. In the Databricks workspace, go to **Compute** → **Create Cluster**
 2. Configure:
    - **Cluster name:** `nii-forecast-cluster`
@@ -84,7 +85,7 @@ If you use the default warehouse, leave `cluster_id` blank in the configuration.
    - **Name:** `nii_forecast_pipeline_job`
    - **Task type:** `Notebook` or `PySpark Python script`
    - **Path:** `/Repos/<your_path>/pipelines/run_pipeline.py`
-   - **Cluster:** Select your cluster from Step 2
+   - **Cluster:** Select the default warehouse or your dedicated cluster from Step 2
    - **Parameters:** (optional) pass config path
 3. Set a schedule (e.g., daily at 2 AM) or trigger manually
 
@@ -146,8 +147,9 @@ The pipeline manages 10 configuration families that control the NII forecast:
 - Verify DATABRICKS_HOST matches your workspace URL
 
 **Cluster not found:**
-- Update conf/sample_config.yaml with your actual cluster_id
-- Ensure the cluster is running before job execution
+- If you are using a dedicated cluster, update `conf/sample_config.yaml` with the correct `cluster_id`
+- If you are using the default warehouse, this warning may be unrelated to your job cluster setup
+- Ensure the cluster is running before job execution if using a dedicated cluster
 
 **Delta tables not found on first run:**
 - Verify the catalog `nii_forecast` exists in your Databricks workspace

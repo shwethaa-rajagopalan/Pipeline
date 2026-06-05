@@ -10,15 +10,18 @@
   - Generate new token (name: `nii_pipeline_token`)
   - Copy and save securely
 
-- [ ] **Step 2: Create a Compute Cluster**
-  - Compute → Create Cluster
+- [ ] **Step 2: Verify Default Warehouse or Create a Compute Cluster (Optional)**
+  - For Databricks free tier, the default `Serverless Starter Warehouse` is usually available automatically
+  - Warehouse ID: `6c5228901e0e783a`
+  - If you prefer dedicated compute, create a cluster in **Compute** → **Create Cluster**
   - Runtime: 15.4 LTS (Spark 3.5.0 or later)
   - Workers: 2-4 (adjust to your data volume)
-  - Note the **Cluster ID**
+  - Note the **Cluster ID** if you create one
 
 - [ ] **Step 3: Update Configuration**
   - Edit `conf/sample_config.yaml`
-  - Set `cluster_id: "0123-456789-abcdef"` (from Step 2)
+  - Leave `cluster_id: ""` when using the default warehouse
+  - Set `cluster_id: "0123-456789-abcdef"` only if you provisioned a dedicated cluster
 
 - [ ] **Step 4: Create Databricks Catalog and Schema**
   - In Databricks SQL, run:
@@ -39,7 +42,7 @@
   - Name: `nii_forecast_pipeline_job`
   - Task: Notebook or PySpark script
   - Path: `/Repos/<your_path>/pipelines/run_pipeline.py`
-  - Cluster: Select your cluster from Step 2
+  - Cluster: Select the default warehouse or your dedicated cluster from Step 2
   - Schedule: Daily at 2 AM (or manual trigger)
 
 - [ ] **Step 7: Set Up GitHub Actions Secrets (Optional)**

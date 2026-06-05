@@ -39,7 +39,7 @@ CLUSTERS=$(databricks clusters list --output json 2>/dev/null | python3 -c "impo
 if [ "$CLUSTERS" -gt 0 ]; then
   echo "✓ Found $CLUSTERS cluster(s)"
 else
-  echo "⚠ No clusters found. Create one via Databricks UI."
+  echo "⚠ No clusters found. This may be fine if you are using the default Databricks warehouse."
 fi
 
 echo ""
@@ -65,8 +65,8 @@ echo "✓ Pre-deployment validation complete!"
 echo "=========================================="
 echo ""
 echo "Next steps:"
-echo "  1. Ensure a cluster is created and running"
-echo "  2. Update conf/sample_config.yaml with cluster_id"
+echo "  1. If using a dedicated cluster, ensure it is created and running"
+echo "  2. Update conf/sample_config.yaml with cluster_id or leave it blank for the default warehouse"
 echo "  3. Create a Databricks job pointing to:"
 echo "     /Repos/.../pipelines/run_pipeline.py"
 echo "  4. Run: bash scripts/deploy_to_databricks.sh"
