@@ -2,6 +2,8 @@ from typing import Any, Dict, Optional
 
 from pyspark.sql import SparkSession
 
+from utils.db_utils import read_table
+
 
 class BaseProcessor:
     def __init__(self, task_context: Dict[str, Any]):
@@ -27,7 +29,7 @@ class BaseProcessor:
         if not parameter_store_path:
             return None
 
-        df = spark.read.format("delta").load(parameter_store_path)
+        df = read_table(spark, parameter_store_path, format="delta")
         rows = (
             df.filter(
                 (df.config_key == config_key) & (df.config_version == self.config_versions.get(config_key))

@@ -1,5 +1,8 @@
 env: prod
 
+# For Databricks, use Unity Catalog table names or DBFS paths for Delta data.
+# Example: nii_forecast.pipeline.actuals_enriched or dbfs:/mnt/nii_forecast/...
+
 databricks:
   workspace_url: "https://dbc-2a897476-1b67.cloud.databricks.com"
   repo_path: "/Repos/nii_forecasting_pipeline"
@@ -21,18 +24,18 @@ tables:
     active_config_versions: "/Volumes/nii_forecast/config/active_config_versions"
     parameter_catalog: "/Volumes/nii_forecast/config/parameter_catalog"
   intermediate:
-    yield_parameters: "/Volumes/nii_forecast/staging/yield_parameters"
-    balance_parameters: "/Volumes/nii_forecast/staging/balance_parameters"
+    yield_parameters: "/Volumes/nii_forecast/staging/yield_parameters" # Verify schema existence
+    balance_parameters: "/Volumes/nii_forecast/staging/balance_parameters" # Verify schema existence
     proxy_relationships: "/Volumes/nii_forecast/lookup/proxy_relationships"
     inflation_adjustments: "/Volumes/nii_forecast/lookup/inflation_adjustments"
     scaling_factors: "/Volumes/nii_forecast/lookup/scaling_factors"
     launchpoint_positions: "/Volumes/nii_forecast/enriched/launchpoint_positions"
     nii_drivers: "/Volumes/nii_forecast/enriched/nii_drivers"
   output:
-    config_snapshot: "/Volumes/nii_forecast/staging/config_snapshot"
-    actuals_enriched: "/Volumes/nii_forecast/staging/actuals_enriched"
-    forecast_enriched: "/Volumes/nii_forecast/staging/forecast_enriched"
-    launchpoint_enriched: "/Volumes/nii_forecast/staging/launchpoint_enriched"
+    config_snapshot: "/Volumes/nii_forecast/staging/config_snapshot" # Verify schema existence
+    actuals_enriched: "/Volumes/nii_forecast/staging/actuals_enriched" # Verify schema existence
+    forecast_enriched: "/Volumes/nii_forecast/staging/forecast_enriched" # Verify schema existence
+    launchpoint_enriched: "/Volumes/nii_forecast/staging/launchpoint_enriched" # Verify schema existence
     calculation_lookup: "/Volumes/nii_forecast/lookup/calculation_lookup"
     driver_parameters: "/Volumes/nii_forecast/lookup/driver_parameters"
     proxy_enriched: "/Volumes/nii_forecast/lookup/proxy_enriched"
