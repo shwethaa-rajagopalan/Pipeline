@@ -1,0 +1,32 @@
+name: CI / Deploy to Databricks
+
+on:
+  push:
+    branches: [ main, master ]
+
+env:
+  DATABRICKS_HOST: "https://dbc-2a897476-1b67.cloud.databricks.com"
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          pytest -q
+      - name: Deploy to Databricks
+        env:
+          DATABRICKS_HOST: ${{ env.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          chmod +x scripts/deploy_to_databricks.sh
+          bash scripts/deploy_to_databricks.sh

@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbx-pyspark-pipeline"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "PySpark pipeline scaffold for Databricks CI/CD"
+authors = [{name = "scaffold"}]

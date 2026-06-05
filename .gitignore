@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+htmlcov/
+.dist-info/
+.eggs/
+.env
+.env.*
+.DS_Store
+/output/

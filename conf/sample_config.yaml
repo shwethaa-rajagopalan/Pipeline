@@ -1,0 +1,27 @@
+env: prod
+
+databricks:
+  workspace_url: "https://dbc-2a897476-1b67.cloud.databricks.com"
+  token_secret: "DATABRICKS_TOKEN"
+  repo_path: "/Repos/nii_forecasting_pipeline"
+  cluster_id: ""  # Optional: leave blank to use the default Databricks serverless warehouse or default job cluster
+
+paths:
+  catalog: "nii_forecast"
+  schema: "pipeline"
+  config_snapshot: "/nii_forecast/pipeline/config_snapshot"
+  actuals_enriched: "/nii_forecast/pipeline/actuals_enriched"
+  forecast_enriched: "/nii_forecast/pipeline/forecast_enriched"
+  launchpoint_enriched: "/nii_forecast/pipeline/launchpoint_enriched"
+  calculation_lookup: "/nii_forecast/pipeline/calculation_lookup"
+  proxy_enriched: "/nii_forecast/pipeline/proxy_enriched"
+  inflation_adjustment: "/nii_forecast/pipeline/inflation_adjustment"
+  yield_delta: "/nii_forecast/pipeline/yield_delta"
+  nii_stage: "/nii_forecast/pipeline/nii_stage"
+  nii_stage_cc: "/nii_forecast/curated/nii_stage_cc"
+
+output_format: "delta"
+
+pipeline:
+  run_id_prefix: "demo_run"
+  day_count_basis: 360
