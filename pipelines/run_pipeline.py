@@ -8,15 +8,33 @@ from pipelines.task_runner import TaskRunner
 
 
 def get_repo_root() -> Path:
-    """Get repo root, handling both local and Databricks notebook contexts."""
+    """Resolve repository root robustly.
+
+    Strategy:
+    - Prefer __file__ when available (normal script execution).
+    - Otherwise, walk upward from current working directory to find a folder
+      that contains a `conf` directory with `sample_config.yaml`.
+    - Fallback to current working directory.
+    """
+    # 1) Try __file__ (standard script run)
     try:
-        return Path(__file__).resolve().parent.parent
-    except NameError:
-        # In Databricks notebooks, __file__ is not defined
-        # Use current working directory or environment variable
-        if "DATABRICKS_RUNTIME_VERSION" in os.environ:
-            return Path.cwd()
-        return Path.cwd()
+        p = Path(__file__).resolve()
+        candidate = p.parent.parent
+        # If this candidate looks like repo root (contains conf), accept it
+        if (candidate / "conf" / "sample_config.yaml").exists() or (candidate / "conf").exists():
+            return candidate
+        # Otherwise fallthrough to search parents
+    except Exception:
+        pass
+
+    # 2) Walk up from cwd to find conf/sample_config.yaml
+    cwd = Path.cwd()
+    for ancestor in [cwd] + list(cwd.parents):
+        if (ancestor / "conf" / "sample_config.yaml").exists() or (ancestor / "conf").exists():
+            return ancestor
+
+    # 3) Last resort: return cwd
+    return cwd
 
 
 REPO_ROOT = get_repo_root()
@@ -26,10 +44,19 @@ def main(config_path: str = "conf/sample_config.yaml", task_definition: str = "c
     config_path = Path(config_path)
     task_definition_path = Path(task_definition)
 
-    if not config_path.is_absolute():
-        config_path = REPO_ROOT / config_path
-    if not task_definition_path.is_absolute():
-        task_definition_path = REPO_ROOT / task_definition_path
+    def _resolve_relative(p: Path) -> Path:
+        if p.is_absolute():
+            return p
+        candidates = [REPO_ROOT, REPO_ROOT.parent, Path.cwd(), Path.cwd().parent]
+        for root in candidates:
+            candidate = root / p
+            if candidate.exists():
+                return candidate
+        # fallback to REPO_ROOT / p even if missing
+        return REPO_ROOT / p
+
+    config_path = _resolve_relative(config_path)
+    task_definition_path = _resolve_relative(task_definition_path)
 
     runner = TaskRunner(task_definition_path, config_path)
     spark = create_spark_session("nii_pipeline")
