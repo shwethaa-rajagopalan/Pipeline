@@ -2,7 +2,6 @@ env: prod
 
 databricks:
   workspace_url: "https://dbc-2a897476-1b67.cloud.databricks.com"
-  token_secret: "DATABRICKS_TOKEN"
   repo_path: "/Repos/nii_forecasting_pipeline"
   cluster_id: ""  # Optional: leave blank to use the default Databricks serverless warehouse or default job cluster
 
