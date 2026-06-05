@@ -44,6 +44,7 @@
   - Path: `/Repos/<your_path>/pipelines/run_pipeline.py`
   - Cluster: Select the default warehouse or your dedicated cluster from Step 2
   - Schedule: Daily at 2 AM (or manual trigger)
+  - Note: No additional Databricks UI configuration is required beyond repository import and job creation
 
 - [ ] **Step 7: Set Up GitHub Actions Secrets (Optional)**
   - GitHub repo → Settings → Secrets and variables → Actions

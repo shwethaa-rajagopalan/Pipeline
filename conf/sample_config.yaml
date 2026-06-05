@@ -5,22 +5,71 @@ databricks:
   repo_path: "/Repos/nii_forecasting_pipeline"
   cluster_id: ""  # Optional: leave blank to use the default Databricks serverless warehouse or default job cluster
 
-paths:
-  catalog: "nii_forecast"
-  schema: "pipeline"
-  config_snapshot: "/nii_forecast/pipeline/config_snapshot"
-  actuals_enriched: "/nii_forecast/pipeline/actuals_enriched"
-  forecast_enriched: "/nii_forecast/pipeline/forecast_enriched"
-  launchpoint_enriched: "/nii_forecast/pipeline/launchpoint_enriched"
-  calculation_lookup: "/nii_forecast/pipeline/calculation_lookup"
-  proxy_enriched: "/nii_forecast/pipeline/proxy_enriched"
-  inflation_adjustment: "/nii_forecast/pipeline/inflation_adjustment"
-  yield_delta: "/nii_forecast/pipeline/yield_delta"
-  nii_stage: "/nii_forecast/pipeline/nii_stage"
-  nii_stage_cc: "/nii_forecast/curated/nii_stage_cc"
+tables:
+  source:
+    actuals_balance: "/nii_forecast/source/actuals_balance"
+    actuals_income: "/nii_forecast/source/actuals_income"
+    forecast_inputs: "/nii_forecast/source/forecast_inputs"
+    market_assumptions: "/nii_forecast/source/market_assumptions"
+  hierarchy:
+    business_unit_hierarchy: "/nii_forecast/dim/business_unit_hierarchy"
+    product_hierarchy: "/nii_forecast/dim/product_hierarchy"
+    financial_element_hierarchy: "/nii_forecast/dim/financial_element_hierarchy"
+    cost_centre_bridge: "/nii_forecast/dim/cost_centre_bridge"
+  config:
+    parameter_store: "/nii_forecast/config/parameter_store"
+    active_config_versions: "/nii_forecast/config/active_config_versions"
+    parameter_catalog: "/nii_forecast/config/parameter_catalog"
+  intermediate:
+    yield_parameters: "/nii_forecast/staging/yield_parameters"
+    balance_parameters: "/nii_forecast/staging/balance_parameters"
+    proxy_relationships: "/nii_forecast/lookup/proxy_relationships"
+    inflation_adjustments: "/nii_forecast/lookup/inflation_adjustments"
+    scaling_factors: "/nii_forecast/lookup/scaling_factors"
+    launchpoint_positions: "/nii_forecast/enriched/launchpoint_positions"
+    nii_drivers: "/nii_forecast/enriched/nii_drivers"
+  output:
+    config_snapshot: "/nii_forecast/staging/config_snapshot"
+    actuals_enriched: "/nii_forecast/staging/actuals_enriched"
+    forecast_enriched: "/nii_forecast/staging/forecast_enriched"
+    launchpoint_enriched: "/nii_forecast/staging/launchpoint_enriched"
+    driver_parameters: "/nii_forecast/lookup/driver_parameters"
+    proxy_enriched: "/nii_forecast/lookup/proxy_enriched"
+    inflation_adjustment: "/nii_forecast/lookup/inflation_adjustment"
+    yield_delta: "/nii_forecast/lookup/yield_delta"
+    nii_stage: "/nii_forecast/curated/nii_stage"
+    nii_stage_cc: "/nii_forecast/curated/nii_stage_cc"
 
 output_format: "delta"
 
 pipeline:
   run_id_prefix: "demo_run"
   day_count_basis: 360
+
+default_task_input:
+  system_params:
+    job_name: "nii_forecast"
+    run_date: "2026-06-05"
+    environment: "prod"
+  business_params:
+    business_unit: "Retail"
+    product: "Term Loan"
+    currency: "USD"
+  configuration_versions:
+    CFG100: "v2026-06"
+    CFG101: "v2026-06"
+    CFG102: "v2026-06"
+    CFG103: "v2026-06"
+    CFG104: "v2026-06"
+    CFG105: "v2026-06"
+    CFG106: "v2026-06"
+    CFG107: "v2026-06"
+    CFG108: "v2026-06"
+    CFG109: "v2026-06"
+    CFG110: "v2026-06"
+    CFG111: "v2026-06"
+    CFG112: "v2026-06"
+    CFG113: "v2026-06"
+    CFG114: "v2026-06"
+    CFG115: "v2026-06"
+    CFG116: "v2026-06"

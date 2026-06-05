@@ -1,0 +1,7 @@
+task_name: NiiForecastTask
+required_params:
+  - job_name
+  - run_date
+  - business_unit
+  - product
+processing_class: NiiForecastProcessor

@@ -1,39 +1,45 @@
-import yaml
+import argparse
+from pathlib import Path
 from typing import Dict
+
 from utils.spark_session import create_spark_session
+from pipelines.task_runner import TaskRunner
 
-from pipelines.steps import step_01_config_update as config_update
-from pipelines.steps import step_02_actuals_enrichment as actuals_enrichment
-from pipelines.steps import step_03_forecast_enrichment as forecast_enrichment
-from pipelines.steps import step_04_launchpoint_enrichment as launchpoint_enrichment
-from pipelines.steps import step_05_calculation_lookup as calculation_lookup
-from pipelines.steps import step_06_proxy_enrichment as proxy_enrichment
-from pipelines.steps import step_07_inflation_adjustment_lookup as inflation_adjustment_lookup
-from pipelines.steps import step_08_yield_delta as yield_delta
-from pipelines.steps import step_09_nii_stage as nii_stage
-from pipelines.steps import step_10_nii_stage_cc as nii_stage_cc
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def load_config(path: str) -> Dict:
-    with open(path, "r") as f:
-        return yaml.safe_load(f)
+def main(config_path: str = "conf/sample_config.yaml", task_definition: str = "conf/tasks/nii_forecast_task.yml") -> None:
+    config_path = Path(config_path)
+    task_definition_path = Path(task_definition)
 
+    if not config_path.is_absolute():
+        config_path = REPO_ROOT / config_path
+    if not task_definition_path.is_absolute():
+        task_definition_path = REPO_ROOT / task_definition_path
 
-def main(config_path: str = "conf/sample_config.yaml") -> None:
-    config = load_config(config_path)
+    runner = TaskRunner(task_definition_path, config_path)
     spark = create_spark_session("nii_pipeline")
 
-    config_snapshot = config_update.run(spark, config)
-    actuals = actuals_enrichment.run(spark, config, config_snapshot)
-    forecast = forecast_enrichment.run(spark, config, config_snapshot)
-    launchpoint = launchpoint_enrichment.run(spark, config, actuals, forecast, config_snapshot)
-    drivers = calculation_lookup.run(spark, config, launchpoint, config_snapshot)
-    proxy = proxy_enrichment.run(spark, config, drivers, config_snapshot)
-    inflation = inflation_adjustment_lookup.run(spark, config, proxy, config_snapshot)
-    yield_delta_df = yield_delta.run(spark, config, proxy, inflation, config_snapshot)
-    nii = nii_stage.run(spark, config, yield_delta_df, config_snapshot)
-    nii_stage_cc.run(spark, config, nii, config_snapshot)
+    task_input = {
+        "system_params": runner.config.get("default_task_input", {}).get("system_params", {}),
+        "business_params": runner.config.get("default_task_input", {}).get("business_params", {}),
+        "configuration_versions": runner.config.get("default_task_input", {}).get("configuration_versions", {}),
+    }
+
+    runner.run(spark, task_input)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run the NII pipeline task runner.")
+    parser.add_argument(
+        "--config",
+        default="conf/sample_config.yaml",
+        help="Path to the pipeline configuration YAML.",
+    )
+    parser.add_argument(
+        "--task-definition",
+        default="conf/tasks/nii_forecast_task.yml",
+        help="Path to the YAML task definition.",
+    )
+    args = parser.parse_args()
+    main(config_path=args.config, task_definition=args.task_definition)

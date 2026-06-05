@@ -123,9 +123,11 @@ If you created a dedicated cluster, replace the empty string with its Cluster ID
    - **Task name:** `run_pipeline` (or any name)
    - **Type:** `Python script`
    - **Path:** `/Repos/<your_path_from_step_6>/pipelines/run_pipeline.py`
-   - **Cluster:** Select `nii-forecast-cluster` (from Step 2)
+   - **Cluster:** Select the default warehouse or `nii-forecast-cluster` if you created a dedicated cluster
 3. **Optional:** Set a schedule (e.g., **Daily** at 2 AM)
 4. Click **Create**
+
+> No additional Databricks UI steps are required for the new task/processor architecture beyond the normal repo import and job creation.
 
 ---
 
